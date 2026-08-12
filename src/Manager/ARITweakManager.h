@@ -147,13 +147,15 @@ typedef struct SBRootFolderViewMetrics {
 @property (nonatomic, strong) UIView *pageControl; // SBIconListPageControl
 @property (nonatomic, strong) UIView *scrollAccessoryView;
 - (void)layoutPageControlWithMetrics:(const struct SBRootFolderViewMetrics *)metrics;
-- (SBIconListView *)currentIconListView;
 - (SBIconListView *)firstIconListView;
 - (SBDockView *)dockView;
 @end
 
 @interface SBRootFolderController : UIViewController
 - (SBRootFolderView *)rootFolderView;
+// iOS 17: currentIconListView moved off SBRootFolderView; declared on SBFolderController
+// (parent of SBRootFolderController). Theos SDKs don't ship the private header, so declare it here.
+- (SBIconListView *)currentIconListView;
 @end
 
 @interface SBHIconManager : NSObject
