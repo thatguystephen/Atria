@@ -6,6 +6,7 @@
 #import "ARITweakManager.h"
 #import "ARIEditManager.h"
 #import <rootless.h>
+#import <SpringBoardHome/SBFolderController.h>
 
 #import "../Hooks/Shared.h"
 
@@ -535,7 +536,13 @@
 }
 
 - (SBIconListView *)currentListView {
-    return [self rootFolderView].currentIconListView;
+    Class sbc = objc_getClass("SBIconController");
+    if (!sbc) return nil;
+
+    SBRootFolderController *rfc = [[sbc sharedInstance] rootFolderController];
+    if (!rfc || !rfc.isViewLoaded) return nil;
+
+    return rfc.currentIconListView;
 }
 
 // Returns a string which serves as a prefix for per-page layout settings
