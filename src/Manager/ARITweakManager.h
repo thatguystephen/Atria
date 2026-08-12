@@ -187,6 +187,7 @@ typedef struct SBRootFolderViewMetrics {
 @interface SBIconController : UIViewController
 - (SBFloatingDockController *)floatingDockController; // iOS 13-15 only (does not exist on 16)
 - (SBRootFolderController *)_rootFolderController;
+- (SBRootFolderController *)rootFolderController;
 - (SBHIconManager *)iconManager;
 + (SBIconController *)sharedInstance;
 @end
