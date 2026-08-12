@@ -10,6 +10,8 @@ permissions:
 jobs:
   package:
     runs-on: macos-latest
+    env:
+      HOMEBREW_NO_REQUIRE_TAP_TRUST: "1"
     steps:
       - uses: actions/checkout@v4
 
