@@ -6,7 +6,9 @@
 #import "ARITweakManager.h"
 #import "ARIEditManager.h"
 #import <rootless.h>
+#if __has_include(<SpringBoardHome/SBFolderController.h>)
 #import <SpringBoardHome/SBFolderController.h>
+#endif
 
 #import "../Hooks/Shared.h"
 
