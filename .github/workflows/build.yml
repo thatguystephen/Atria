@@ -1,0 +1,28 @@
+name: Build Atria rootless package
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Theos
+        uses: Randomblock1/theos-action@v1.5
+
+      - name: Build rootless package
+        run: |
+          make clean package FINALPACKAGE=1
+
+      - name: Upload rootless deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: Atria-rootless-deb
+          path: packages/*.deb
+          if-no-files-found: error

@@ -5,6 +5,7 @@
 
 #import "ARIRootListController.h"
 #import "../../src/UI/Splash/ARISplashViewController.h"
+#import <rootless.h>
 
 @implementation ARIRootListController
 
@@ -72,7 +73,7 @@
 
     // Load preferences plist
     NSError *error;
-    NSURL *url = [NSURL fileURLWithPath:@THEOS_PACKAGE_INSTALL_PREFIX "/var/mobile/Library/Preferences/me.lau.AtriaPrefs.plist"];
+    NSURL *url = [NSURL fileURLWithPath:@"/var/mobile/Library/Preferences/me.lau.AtriaPrefs.plist"];
     NSMutableDictionary *dict = [[NSDictionary dictionaryWithContentsOfURL:url error:&error] mutableCopy]
                                     ?: [NSMutableDictionary new];
     if(error) {

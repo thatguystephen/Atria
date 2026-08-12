@@ -5,6 +5,7 @@
 
 #import "ARITweakManager.h"
 #import "ARIEditManager.h"
+#import <rootless.h>
 
 #import "../Hooks/Shared.h"
 
@@ -38,7 +39,7 @@
         _firmwareVersion = [[[device systemVersion] componentsSeparatedByString:@"."][0] integerValue];
         _deviceIPad = [[device model] hasPrefix:@"iPad"];
         // ShyLabels compatibility
-        _shyLabelsInstalled = [[NSFileManager defaultManager] fileExistsAtPath:@THEOS_PACKAGE_INSTALL_PREFIX "/Library/MobileSubstrate/DynamicLibraries/ShyLabels.dylib"];
+        _shyLabelsInstalled = [[NSFileManager defaultManager] fileExistsAtPath:ROOT_PATH_NS(@"/Library/MobileSubstrate/DynamicLibraries/ShyLabels.dylib")];
         // NSUserDefaults to get what values the user set
         _preferences = [[NSUserDefaults alloc] initWithSuiteName:@"me.lau.AtriaPrefs"];
         _enabled = [_preferences objectForKey:@"enabled"] ? [[_preferences objectForKey:@"enabled"] boolValue] : YES;
@@ -668,7 +669,13 @@
 }
 
 + (UIInterfaceOrientation)currentDeviceOrientation {
-    return [[[UIApplication sharedApplication] windows] firstObject].windowScene.interfaceOrientation;
+    for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+        if (scene.activationState == UISceneActivationStateForegroundActive && [scene isKindOfClass:[UIWindowScene class]]) {
+            return ((UIWindowScene *)scene).interfaceOrientation;
+        }
+    }
+
+    return UIInterfaceOrientationUnknown;
 }
 
 + (BOOL)isUsingFloatingDock {

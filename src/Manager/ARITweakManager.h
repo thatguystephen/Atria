@@ -105,13 +105,15 @@ typedef struct SBRootFolderViewMetrics {
 @property (nonatomic, assign) CGSize alignmentIconSize;
 @end
 
+@protocol SBIconListLayout;
+
 @class SBIcon;
 @class ARILabelView;
 @class ARIBackgroundView;
 @interface SBIconListView : UIView
 @property (nonatomic, assign, getter=isEditing, nonatomic) BOOL editing;
 @property (nonatomic, strong) NSString *iconLocation;
-@property (nonatomic, assign) SBIconListFlowExtendedLayout *layout;
+@property (nonatomic, assign) id<SBIconListLayout> layout;
 @property (nonatomic, assign) CGFloat iconContentScale;
 @property (nonatomic, assign) UIEdgeInsets additionalLayoutInsets; // iOS 14+
 @property (nonatomic, assign) UIEdgeInsets layoutInsets;           // iOS 13

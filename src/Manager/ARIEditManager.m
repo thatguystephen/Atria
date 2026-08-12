@@ -1,6 +1,7 @@
 #import "ARIEditManager.h"
 #import "../Editor/ARISettingCell.h"
 #import "ARITweakManager.h"
+#import <rootless.h>
 
 #include <objc/runtime.h>
 
@@ -162,7 +163,7 @@
     }
 
     // Calculate path and set image
-    NSString *path = [NSString stringWithFormat:@THEOS_PACKAGE_INSTALL_PREFIX "/Library/PreferenceBundles/AtriaPrefs.bundle/Editor/%@.png", key];
+    NSString *path = [NSString stringWithFormat:ROOT_PATH_NS(@"/Library/PreferenceBundles/AtriaPrefs.bundle/Editor/%@.png"), key];
     cell.img.image = [[UIImage imageWithContentsOfFile:path] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] ?: [UIImage systemImageNamed:@"gear"];
 
     return cell;

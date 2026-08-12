@@ -13,8 +13,10 @@
 
 static BOOL didLaunchSB = NO;
 
+@protocol SBIconListLayout;
+
 @interface SBHDefaultIconListLayoutProvider : NSObject
-- (SBIconListFlowExtendedLayout *)layoutForIconLocation:(NSString *)location;
+- (id<SBIconListLayout>)layoutForIconLocation:(NSString *)location;
 @end
 
 %hook SBIconListView
@@ -30,8 +32,9 @@ static BOOL didLaunchSB = NO;
 	[[ARIEditManager sharedInstance] presentEditAlert];
 }
 
-- (SBIconListFlowExtendedLayout *)layout {
-	SBIconListFlowExtendedLayout *orig = %orig;
+- (id<SBIconListLayout>)layout {
+	id<SBIconListLayout> layout = %orig;
+	SBIconListFlowExtendedLayout *orig = (SBIconListFlowExtendedLayout *)layout;
 
 	SBIconListModel *model = [self model];
 	ARITweakManager *manager = [ARITweakManager sharedInstance];
@@ -188,12 +191,7 @@ static BOOL didLaunchSB = NO;
 
 		// Create a new flow layout with our modified (and copied) configuration
 		// layoutConfiguration is readonly on SBIconListFlowExtendedLayout
-		if([manager firmwareVersion] >= 14) {
-			self._atriaCachedLayout = [[objc_getClass("SBIconListFlowExtendedLayout") alloc] initWithLayoutConfiguration:config];
-		} else {
-			// SBIconListFlowExtendedLayout does not exist on 13
-			self._atriaCachedLayout = [[objc_getClass("SBIconListFlowLayout") alloc] initWithLayoutConfiguration:config];
-		}
+		self._atriaCachedLayout = [[objc_getClass("SBIconListFlowExtendedLayout") alloc] initWithLayoutConfiguration:config];
 	} else if(IconListIsDock(self)) {
 		SBIconListGridLayoutConfiguration *config = orig.layoutConfiguration;
 
@@ -209,24 +207,12 @@ static BOOL didLaunchSB = NO;
 		[config setNumberOfLandscapeColumns:rows];
 		[config setNumberOfLandscapeRows:cols];
 
-		if([manager firmwareVersion] >= 14) {
-			self.additionalLayoutInsets = UIEdgeInsetsMake(
-				[manager floatValueForKey:@"dock_inset_top"],
-				[manager floatValueForKey:@"dock_inset_left"],
-				[manager floatValueForKey:@"dock_inset_bottom"],
-				[manager floatValueForKey:@"dock_inset_right"]
-			);
-		} else {
-			CGFloat spaceX = [manager floatValueForKey:@"dock_spacing_x"];
-			CGFloat spaceY = [manager floatValueForKey:@"dock_spacing_y"];
-
-			self.layoutInsets = UIEdgeInsetsMake(
-				[manager floatValueForKey:@"dock_inset_top"] - spaceY / 2,
-				[manager floatValueForKey:@"dock_inset_left"] - spaceX / 2,
-				[manager floatValueForKey:@"dock_inset_bottom"] - spaceY / 2,
-				[manager floatValueForKey:@"dock_inset_right"] - spaceX / 2
-			);
-		}
+		self.additionalLayoutInsets = UIEdgeInsetsMake(
+			[manager floatValueForKey:@"dock_inset_top"],
+			[manager floatValueForKey:@"dock_inset_left"],
+			[manager floatValueForKey:@"dock_inset_bottom"],
+			[manager floatValueForKey:@"dock_inset_right"]
+		);
 
 		// We don't need to copy our grid config for dock, so set it
 		// to the original object now that we've modified the layout.
@@ -238,7 +224,7 @@ static BOOL didLaunchSB = NO;
 	CGSize spacing = %orig;
 	// This doesn't work on iOS 13
 	ARITweakManager *manager = [ARITweakManager sharedInstance];
-	if([manager firmwareVersion] >= 14 && IconListIsDock(self)) {
+	if(IconListIsDock(self)) {
 		CGFloat spaceX = [manager floatValueForKey:@"dock_spacing_x"];
 		CGFloat spaceY = [manager floatValueForKey:@"dock_spacing_y"];
 		// I divide by 2 to keep it consistent with behavior of root
@@ -270,8 +256,9 @@ static BOOL didLaunchSB = NO;
 // Layout provider hook
 %hook SBHDefaultIconListLayoutProvider
 
-- (SBIconListFlowExtendedLayout *)layoutForIconLocation:(NSString *)location {
-	SBIconListFlowExtendedLayout *orig = %orig;
+- (id<SBIconListLayout>)layoutForIconLocation:(NSString *)location {
+	id<SBIconListLayout> layout = %orig;
+	SBIconListFlowExtendedLayout *orig = (SBIconListFlowExtendedLayout *)layout;
 	// We override the original class for root, unless we are the subclass
 	ARITweakManager *manager = [ARITweakManager sharedInstance];
 	if(IsLocationRoot(location) && ![self isMemberOfClass:objc_getClass("ARIAppLibraryIconListLayoutProvider")]) {

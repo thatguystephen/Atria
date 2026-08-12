@@ -50,7 +50,7 @@ static struct SBHIconGridSizeClassSizes generateGridSizeClassSizes(double cols, 
 %new
 - (void)_atriaUpdateModelGridSizes {
 	ARITweakManager *manager = [ARITweakManager sharedInstance];
-	if([manager firmwareVersion] < 14 || !self._atriaLocation || !IsLocationRoot(self._atriaLocation)) return;
+	if(!self._atriaLocation || !IsLocationRoot(self._atriaLocation)) return;
 
 	struct SBHIconGridSize gridSize = [self gridSize];
 	// Get the number of columns and rows for the associated list view
@@ -100,8 +100,7 @@ static struct SBHIconGridSizeClassSizes generateGridSizeClassSizes(double cols, 
 
 %end
 
-// Version specific hooks for widget support
-%group Widgets14
+// Widget layout hooks
 
 %hook SBIconListView
 
@@ -153,49 +152,10 @@ static struct SBHIconGridSizeClassSizes generateGridSizeClassSizes(double cols, 
 
 %end
 
-%end
-
-%group IconListModelFix14
-
-%hook SBIconListModel
-
-// Unfortunately, the gridSizeForGridSizeClass method on SBIconListModel only exists on iOS 15+
-// On iOS 14, we add this method to make it work across versions
-
-%new
-- (struct SBHIconGridSize)gridSizeForGridSizeClass:(NSUInteger)arg1 {
-	struct SBHIconGridSizeClassSizes gridSizes = [self iconGridSizeClassSizes];
-	switch (arg1) {
-		case 1:
-		return gridSizes.small;
-		case 2:
-		return gridSizes.medium;
-		case 3:
-		return gridSizes.large;
-		case 4:
-		return gridSizes.extraLarge;
-		default:
-		struct SBHIconGridSize defaultSize;
-		return defaultSize;
-	}
-}
-
-%end
-
-%end
-
 %ctor {
 	ARITweakManager *manager = [ARITweakManager sharedInstance];
 	if([manager isEnabled] && [manager boolValueForKey:@"layoutEnabled"]) {
 		NSLog(@"[Atria]: Loading hooks from %s", __FILE__);
-
-        %init();
-
-		if([manager firmwareVersion] >= 14) {
-			if([manager firmwareVersion] < 15) {
-				%init(IconListModelFix14);
-			}
-			%init(Widgets14);
-        }
+		%init();
 	}
 }

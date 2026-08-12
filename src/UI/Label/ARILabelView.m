@@ -5,6 +5,7 @@
 
 #import "ARILabelView.h"
 #import "../../Manager/ARITweakManager.h"
+#import <rootless.h>
 
 #import <CoreText/CTFont.h>
 #import <CoreText/CTFontDescriptor.h>
@@ -194,7 +195,7 @@
     static dispatch_once_t token;
     dispatch_once(&token, ^{
         // Load font once
-        NSData *fileData = [NSData dataWithContentsOfFile:@THEOS_PACKAGE_INSTALL_PREFIX "/Library/PreferenceBundles/AtriaPrefs.bundle/Custom.ttf"];
+        NSData *fileData = [NSData dataWithContentsOfFile:ROOT_PATH_NS(@"/Library/PreferenceBundles/AtriaPrefs.bundle/Custom.ttf")];
         if(fileData) {
             cfdesc = CTFontManagerCreateFontDescriptorFromData((CFDataRef)fileData);
         }

@@ -4,6 +4,7 @@
 //
 
 #import "ARITwitterCell.h"
+#import <rootless.h>
 
 @implementation ARITwitterCell {
     UIImageView *_icon;
@@ -63,7 +64,7 @@
 }
 
 - (void)loadImage {
-    NSString *path = [NSString stringWithFormat:@THEOS_PACKAGE_INSTALL_PREFIX "/Library/PreferenceBundles/AtriaPrefs.bundle/ProfilePictures/%@.jpg", _displayName];
+    NSString *path = [NSString stringWithFormat:ROOT_PATH_NS(@"/Library/PreferenceBundles/AtriaPrefs.bundle/ProfilePictures/%@.jpg"), _displayName];
     _icon.image = [UIImage imageWithContentsOfFile:path] ?: [UIImage systemImageNamed:@"person.circle"];
 }
 
