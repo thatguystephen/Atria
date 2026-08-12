@@ -519,7 +519,7 @@
 }
 
 - (SBRootFolderView *)rootFolderView {
-    return [[[objc_getClass("SBIconController") sharedInstance] _rootFolderController] rootFolderView];
+    return [[[objc_getClass("SBIconController") sharedInstance] rootFolderController] rootFolderView];
 }
 
 - (NSArray<SBIconListView *> *)allRootListViews {

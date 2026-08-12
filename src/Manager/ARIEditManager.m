@@ -32,10 +32,11 @@
     if(toggle) {
         // Start edit
         if(_isEditing) return;
+        UIViewController *iconController = [[objc_getClass("SBIconController") sharedInstance] rootViewController];
+        if(!iconController) return;
+
         _isEditing = YES;
         _editingLocation = targetLoc;
-
-        UIViewController *iconController = (UIViewController *)[objc_getClass("SBIconController") sharedInstance];
 
         // Check if this list view has custom config
         _current = [[ARITweakManager sharedInstance] currentListView];
@@ -113,7 +114,9 @@
                                             handler:^(UIAlertAction *action){
                                             }]];
 
-    [[objc_getClass("SBIconController") sharedInstance] presentViewController:alert animated:YES completion:nil];
+    UIViewController *host = [[objc_getClass("SBIconController") sharedInstance] rootViewController];
+    if(!host) return;
+    [host presentViewController:alert animated:YES completion:nil];
 }
 
 - (UIAlertAction *)_createEditAlertAction:(NSString *)title editLocation:(NSString *)location {

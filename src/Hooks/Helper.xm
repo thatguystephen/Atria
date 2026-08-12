@@ -25,7 +25,9 @@
         [splash addEntry:@"See the preference pane in the Settings app for even more options" image:[UIImage systemImageNamed:@"gearshape"]];
         [splash addEntry:@"If you encounter a bug, don't hesitate to report it! Please include your device and iOS version." image:[UIImage systemImageNamed:@"ladybug"]];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            [[objc_getClass("SBIconController") sharedInstance] presentViewController:splash animated:YES completion:nil];
+            UIViewController *host = [[objc_getClass("SBIconController") sharedInstance] rootViewController];
+            if(!host) return;
+            [host presentViewController:splash animated:YES completion:nil];
         });
     }
 }
