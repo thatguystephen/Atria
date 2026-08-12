@@ -31,7 +31,8 @@
         ]];
 
         UILabel *label = [[UILabel alloc] init];
-        label.text = @"Version " PACKAGE_VERSION " (" PACKAGE_TYPE ")";
+        NSString *version = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"1.4.1";
+        label.text = [NSString stringWithFormat:@"Version %@ (rootless)", version];
         label.numberOfLines = 0;
         label.font = [UIFont systemFontOfSize:14];
         label.textAlignment = NSTextAlignmentCenter;
