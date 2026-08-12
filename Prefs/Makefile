@@ -6,7 +6,7 @@ THEOS_PACKAGE_INSTALL_PREFIX = /var/jb
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = AtriaPrefs
-AtriaPrefs_FILES = $(wildcard src/*.m) ../src/UI/Splash/ARISplashViewController.m
+AtriaPrefs_FILES = $(wildcard src/*.m)
 AtriaPrefs_CFLAGS = -fobjc-arc -Wno-deprecated-declarations
 AtriaPrefs_FRAMEWORKS = UIKit
 AtriaPrefs_PRIVATE_FRAMEWORKS = Preferences
