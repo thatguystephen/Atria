@@ -48,7 +48,7 @@ static BOOL didLaunchSB = NO;
 		self._atriaNeedsLayout = NO;
 	}
 
-	return self._atriaCachedLayout ?: orig;
+	return (id<SBIconListLayout>)(self._atriaCachedLayout ?: orig);
 }
 
 - (void)layoutIconsNow {
@@ -282,7 +282,7 @@ static BOOL didLaunchSB = NO;
 		[orig.layoutConfiguration setNumberOfLandscapeColumns:rows];
 		[orig.layoutConfiguration setNumberOfLandscapeRows:cols];
 	}
-	return orig;
+	return (id<SBIconListLayout>)orig;
 }
 
 %end
