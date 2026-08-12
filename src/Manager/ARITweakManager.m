@@ -535,7 +535,8 @@
 }
 
 - (SBIconListView *)currentListView {
-    return [self rootFolderView].currentIconListView;
+    SBRootFolderController *rootFolderController = [[objc_getClass("SBIconController") sharedInstance] rootFolderController];
+    return rootFolderController.currentIconListView;
 }
 
 // Returns a string which serves as a prefix for per-page layout settings

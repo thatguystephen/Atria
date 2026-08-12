@@ -147,13 +147,13 @@ typedef struct SBRootFolderViewMetrics {
 @property (nonatomic, strong) UIView *pageControl; // SBIconListPageControl
 @property (nonatomic, strong) UIView *scrollAccessoryView;
 - (void)layoutPageControlWithMetrics:(const struct SBRootFolderViewMetrics *)metrics;
-- (SBIconListView *)currentIconListView;
 - (SBIconListView *)firstIconListView;
 - (SBDockView *)dockView;
 @end
 
 @interface SBRootFolderController : UIViewController
 - (SBRootFolderView *)rootFolderView;
+- (SBIconListView *)currentIconListView;
 @end
 
 @interface SBHIconManager : NSObject
@@ -186,6 +186,7 @@ typedef struct SBRootFolderViewMetrics {
 
 @interface SBIconController : UIViewController
 - (SBFloatingDockController *)floatingDockController; // iOS 13-15 only (does not exist on 16)
+@property (nonatomic, readonly) SBRootFolderController *rootFolderController;
 - (SBRootFolderController *)_rootFolderController;
 - (SBHIconManager *)iconManager;
 + (SBIconController *)sharedInstance;
